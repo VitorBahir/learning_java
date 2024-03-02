@@ -19,7 +19,7 @@ public class Program {
 		PreparedStatement st = null;
 		try {
 			conn = DB.getConnection();
-			
+			/*
 			st = conn.prepareStatement(
 					"INSERT INTO seller "
 					+ "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
@@ -31,9 +31,12 @@ public class Program {
 			st.setDate(3, new java.sql.Date( sdf.parse("17/08/1979").getTime() ) );
 			st.setDouble(4, 4500.00);
 			st.setInt(5, 2);
+			*/
+			st = conn.prepareStatement("insert into department (Name) "
+					+ "values ('D1'), ('D2')", 
+					Statement.RETURN_GENERATED_KEYS);
 			
 			int rowsAffected = st.executeUpdate();
-			
 			if (rowsAffected > 0) {
 				ResultSet rs = st.getGeneratedKeys();
 				while (rs.next()) {
@@ -44,8 +47,6 @@ public class Program {
 				System.out.println("No rows affected!");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
 			e.printStackTrace();
 		} finally {
 			DB.closeStatement(st);

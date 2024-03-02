@@ -23,16 +23,26 @@ public class Program {
 			st = conn.prepareStatement(
 					"INSERT INTO seller "
 					+ "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
-					+ "VALUES (?, ?, ?, ?, ?)");
-			st.setString(1, "Carl Purple");
-			st.setString(2, "carl@gmail.com");
-			st.setDate(3, new java.sql.Date( sdf.parse("22/04/1985").getTime() ) );
-			st.setDouble(4, 3000.00);
-			st.setInt(5, 4);
+					+ "VALUES (?, ?, ?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
+			
+			st.setString(1, "Joao Roxin");
+			st.setString(2, "joao@gmail.com");
+			st.setDate(3, new java.sql.Date( sdf.parse("17/08/1979").getTime() ) );
+			st.setDouble(4, 4500.00);
+			st.setInt(5, 2);
 			
 			int rowsAffected = st.executeUpdate();
 			
-			System.out.println("Done!  Rows affected: " + rowsAffected);
+			if (rowsAffected > 0) {
+				ResultSet rs = st.getGeneratedKeys();
+				while (rs.next()) {
+					int id = rs.getInt(1);
+					System.out.println("Done! Id = " + id);
+				}
+			} else {
+				System.out.println("No rows affected!");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
